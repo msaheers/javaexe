@@ -2,6 +2,7 @@ public class ClassObj {
 
     int a;
     int b; 
+    
     public static void main( String ao[]) {
         ClassObj s1= new ClassObj();
         ClassObj s2= new ClassObj(); 
