@@ -2,11 +2,17 @@ public class Hellu {
     static int a = 10; 
 
     public static void main(String ar[]) {
-        System.out.println(a);
-        hello();
+
+        Hellu h = new Hellu();
+        System.out.println(h.a);
+        h.hello();
+        hey();
     }
-    static void hello() {
-        
+    void hello() {
+
+    }
+    static void hey() {
+
     }
 }
 
