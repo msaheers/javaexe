@@ -1,0 +1,37 @@
+Java variables vs constructor parameters situation 
+
+public class Raw { 
+    public static void main(String[] args) {
+        Samplo s = new Samplo(10, 20);
+    }
+}
+
+Samplo.java
+
+public Class Samplo { 
+    int a = 100, b = 200; 
+
+    Samplo ( int a, int b) { 
+        this.a = a;
+        this.b = b; 
+        System.out.println(this.a + " " + this.b);
+    }
+}
+
+Step 1: Understanding [this]
+
+In the Samplo class, you have instance variables: 
+
+int a = 100, b = 200; 
+
+So by default, a = 100 and b = 200, 
+
+Then your constructor takes parameters with the same names: 
+
+Samplo( int a, int b)
+
+Inside the constructor, you wrote: 
+
+this.a = a; 
+this.b = b; 
+

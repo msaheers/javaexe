@@ -1,0 +1,115 @@
+What is polymorphism in java? 
+
+polymorphism means 
+
+One thing, many forms
+
+In java, it means: 
+
+The same method name can behave differently depending on the situation. 
+
+Real Life Example: 
+
+Think of a remote control. 
+
+You press the same button "Power"
+
+But: 
+
+On a TV -> It turns on the TV 
+On an AC -> It turns on the AC 
+On a Fan -> It turns on the Fan.
+
+In Java There are 2 Types: 
+
+Compile- Time polymorphism ( Method Overloading)
+Runtime polymorphism ( Method Overriding)
+
+Compile- Time polymorphism ( Method Overloading)
+
+Same method name, but different parameters. 
+
+Example: 
+
+class MathOps { 
+    
+    int add( int a, int b) {
+        return a + b; 
+    }
+
+    int add ( int a, int b, int c) {
+        return a + b + c;
+    }
+}
+
+Here: 
+
+add( int, int)
+add( int, int, int)
+
+Same method name, 
+Different parameter list, 
+Java decides which one to call at compile time 
+
+2 Runtime polymorphism ( Mthod Overriding)
+
+This is the powerful one: 
+
+It happens with: 
+
+Inheritance 
+Method Overriding
+Parent reference pointing to child object
+
+For Example: 
+
+Class Animal { 
+    void sound () {
+        System.out.println("Animal makes a sound)
+    }
+}
+
+class Dog extends Animal { 
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+Now in main:
+
+public class Test {
+    public static void main(String[] args) {
+        Animal a = new Dog();
+        a.sound();
+    }
+}
+
+The output is :  Dog barks 
+
+
+Why is this polymorphism? 
+
+Animal a = new Dog(); 
+
+Reference type -> Animal 
+Object type -> Dog 
+
+When calling: 
+
+a.sound();
+
+// Java decides at runtime which method to execute.
+
+It sees the objects is Dog, so it runs: 
+
+Dog barks
+
+Simple Definition : 
+
+polymorphism in java is the ability of an object to take many forms. 
+It allows methods to perform different behaviors
+depending on the object calling them.
+
+polymorphism = Same method name 
+Different behavior 
+
