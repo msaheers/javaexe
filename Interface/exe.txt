@@ -1,0 +1,71 @@
+Vehicle interface 
+
+Step 1 - Create an Interface 
+
+Create an interface called Vehicle. 
+
+</> Java
+
+interface Vehicle {
+    void start();
+    void stop();
+}
+
+What this means: 
+
+Any class that implements Vehicle must create: 
+
+start()
+stop()
+
+But the interface doesnt say how they work: 
+
+Step - 2 - Create a Car class 
+
+</> Java
+
+class Car implements vehicle { 
+
+    public void start() {
+        System.out.println("Car starts with a key");
+    }
+
+    public void stop() {
+        System.out.println("Car stops with brakes");
+    }
+}
+
+Step 3 -- Create a Bike class 
+
+</> Java 
+
+class Bike implements Vehicle {
+
+    public void start() {
+        System.out.println("Bike starts with a button");
+    }
+
+    public void stop() {
+        System.out.println("Bike stops using hand brake");
+    }
+}
+
+Step 4 -- Main class 
+
+</> Java 
+
+public class Main { 
+    public static void main(String[] args) {
+
+        Vehicle v1 = new Car();
+        v1.start();
+        v1.stop();
+
+        System.out.println();
+
+        Vehicle v2 = new Bike();
+        v2.start();
+        v2.stop();
+    }
+}
+

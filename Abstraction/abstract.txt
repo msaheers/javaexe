@@ -1,0 +1,82 @@
+Abstraction method: 
+
+Abstraction in java is actually a very important concept
+in OOP. 
+
+Abstraction means hiding the complex implementation 
+and showing only the necessary features. 
+
+In Java, abstraction is mainly done using: 
+
+Abstract classes
+Interfaces 
+
+An abstract method is a method that does not
+have a body. 
+It only declares what should happen but not how it happens. 
+
+Example: 
+
+abstract Class Animal {
+    abstract void makeSound(); //abstract method
+
+}
+
+Here we only say animals should make a sound,
+but we don't define how: 
+
+11. Analogy:
+
+Think about a car
+
+When you drive: 
+
+You press accelerator
+you press brake 
+you turn steering 
+
+But you dont know the internal engine process 
+
+You only see the interface (controls),
+not the complex mechanism. 
+
+This is called abstraction 
+
+For example: 
+
+abstract class Animal { 
+    abstract void sound();
+}
+
+class Dog extends Animal { 
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+class Cat extends Animal {
+    void sound() {
+        System.out.println("Cat meows")
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal a = new Dog();
+        a.sound();
+    }
+}
+
+coding analogy 
+
+Imagine using React: 
+
+when you writ useState(), you dont know how React internally manages state.
+
+You only know, useState -> gives state + update function
+
+This is also abstraction 
+
+Therefore, Abstraction hides implementation details 
+and exposes only essential behavior. 
+
