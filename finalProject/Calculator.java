@@ -1,86 +1,86 @@
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 
 public class Calculator implements ActionListener {
 
     JFrame jf;
     JLabel displayLabel;
+    String expression = "";
 
-    JButton[] numberButtons = new JButton[10];
-    JButton addButton, subButton, mulButton, divButton;
-    JButton eqButton, clrButton;
+    Timer cursorTimer;
+    boolean showCursor = true;
 
     public Calculator() {
 
         jf = new JFrame("Calculator");
-        jf.setSize(600, 600);
         jf.setLayout(null);
+        jf.setSize(600, 600);
         jf.setLocation(300, 150);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         displayLabel = new JLabel();
-        displayLabel.setBounds(30, 50, 520, 40);
-        displayLabel.setOpaque(true);
-        displayLabel.setBackground(Color.DARK_GRAY);
-        displayLabel.setForeground(Color.WHITE);
+        displayLabel.setBounds(30, 50, 540, 40);
+        displayLabel.setBackground(Color.GRAY);
         displayLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        displayLabel.setOpaque(true);
+        displayLabel.setFont(displayLabel.getFont().deriveFont(25f));
         jf.add(displayLabel);
 
-        // Numbers
-        for (int i = 0; i < 10; i++) {
-            numberButtons[i] = new JButton(String.valueOf(i));
-            numberButtons[i].addActionListener(this);
-            jf.add(numberButtons[i]);
+        // Create Buttons
+        String[] buttons = { 
+            "7","8","9", "/",
+            "4", "5", "6", "*",
+            "1", "2", "3", "-",
+            "0", ".", "=", "+"
+        };
+
+        int x = 30, y = 130;
+
+        for ( int i = 0; i < buttons.length; i++) {
+
+            JButton btn = new JButton(buttons[i]);
+            btn.setBounds(x, y, 80, 80);
+            btn.setFont(btn.getFont().deriveFont(30f));
+            btn.addActionListener(this);
+            jf.add(btn);
+
+            x += 90;
+
+            if ((i + 1) % 4 == 0) {
+                x = 30;
+                y += 90;
+            }
         }
 
-        numberButtons[7].setBounds(30, 130, 80, 80);
-        numberButtons[8].setBounds(120, 130, 80, 80);
-        numberButtons[9].setBounds(210, 130, 80, 80);
-        numberButtons[4].setBounds(30, 220, 80, 80);
-        numberButtons[5].setBounds(120, 220, 80, 80);
-        numberButtons[6].setBounds(210, 220, 80, 80);
-        numberButtons[1].setBounds(30, 310, 80, 80);
-        numberButtons[2].setBounds(120, 310, 80, 80);
-        numberButtons[3].setBounds(210, 310, 80, 80);
-        numberButtons[0].setBounds(120, 400, 80, 80);
+        JButton clear = new JButton("A/C");
+        clear.setBounds(390, 400, 80, 80);
+        clear.setFont(clear.getFont().deriveFont(20f));
+        clear.addActionListener(this);
+        jf.add(clear);
 
-        // Operators
-        addButton = new JButton("+");
-        subButton = new JButton("-");
-        mulButton = new JButton("*");
-        divButton = new JButton("/");
+        //Blinking Cursor
+        cursorTimer = new Timer (500, e -> {
+            showCursor = !showCursor;
+            UpdateDisplay();
 
-        addButton.setBounds(300, 130, 80, 80);
-        subButton.setBounds(300, 220, 80, 80);
-        mulButton.setBounds(300, 310, 80, 80);
-        divButton.setBounds(300, 400, 80, 80);
-
-        eqButton = new JButton("=");
-        clrButton = new JButton("C");
-
-        eqButton.setBounds(210, 400, 80, 80);
-        clrButton.setBounds(390, 400, 80, 80);
-
-        addButton.addActionListener(this);
-        subButton.addActionListener(this);
-        mulButton.addActionListener(this);
-        divButton.addActionListener(this);
-        eqButton.addActionListener(this);
-        clrButton.addActionListener(this);
-
-        jf.add(addButton);
-        jf.add(subButton);
-        jf.add(mulButton);
-        jf.add(divButton);
-        jf.add(eqButton);
-        jf.add(clrButton);
+        }); 
+            
+        
+        cursorTimer.start();
 
         jf.setVisible(true);
+    }
+
+    private void UpdateDisplay() {
+        if (showCursor) {
+            displayLabel.setText(expression + "|");
+        } else {
+            displayLabel.setText(expression + " ");
+        }
     }
 
     public static void main(String[] args) {
@@ -90,97 +90,94 @@ public class Calculator implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        String cmd = e.getActionCommand();
+        JButton btn = (JButton) e.getSource();
+        String text = btn.getText();
 
-        if (cmd.charAt(0) >= '0' && cmd.charAt(0) <= '9') {
-            displayLabel.setText(displayLabel.getText() + cmd);
+        if (text.equals("A/C")) {
+            expression = "";
         }
 
-        else if (cmd.equals("C")) {
-            displayLabel.setText("");
-        }
-
-        else if (cmd.equals("=")) {
-            calculateResult();
+        else if (text.equals("=")) {
+            calculateExpression();
         }
 
         else {
-            displayLabel.setText(displayLabel.getText() + cmd);
+            expression += text;
         }
+
+        UpdateDisplay();
+
     }
 
-    // 🔥 EXPRESSION EVALUATOR (handles + - * / with priority)
-    private void calculateResult() {
+    private void calculateExpression() {
 
         try {
-            String exp = displayLabel.getText();
-
-            java.util.Stack<Double> values = new java.util.Stack<>();
-            java.util.Stack<Character> ops = new java.util.Stack<>();
-
-            for (int i = 0; i < exp.length(); i++) {
-
-                char c = exp.charAt(i);
-
-                if (Character.isDigit(c)) {
-
-                    StringBuilder sb = new StringBuilder();
-
-                    while (i < exp.length() &&
-                           (Character.isDigit(exp.charAt(i)) || exp.charAt(i) == '.')) {
-                        sb.append(exp.charAt(i));
-                        i++;
-                    }
-                    i--;
-
-                    values.push(Double.parseDouble(sb.toString()));
-                }
-
-                else if (c == '+' || c == '-' || c == '*' || c == '/') {
-
-                    while (!ops.isEmpty() &&
-                           hasPrecedence(c, ops.peek())) {
-
-                        double b = values.pop();
-                        double a = values.pop();
-                        char op = ops.pop();
-
-                        values.push(applyOp(a, b, op));
-                    }
-
-                    ops.push(c);
-                }
-            }
-
-            while (!ops.isEmpty()) {
-                double b = values.pop();
-                double a = values.pop();
-                char op = ops.pop();
-
-                values.push(applyOp(a, b, op));
-            }
-
-            displayLabel.setText(String.valueOf(values.pop()));
+           double result = evaluate(expression);
+           expression = String.valueOf(result);
 
         } catch (Exception e) {
-            displayLabel.setText("Error");
+            expression = "Error";
         }
     }
 
-    private boolean hasPrecedence(char op1, char op2) {
-        if ((op2 == '*' || op2 == '/') && (op1 == '+' || op1 == '-')) {
-            return true;
-        }
-        return false;
-    }
+    private double evaluate(String expr) {
+        return new Object() {
+            int pos = -1, ch;
 
-    private double applyOp(double a, double b, char op) {
-        switch (op) {
-            case '+': return a + b;
-            case '-': return a - b;
-            case '*': return a * b;
-            case '/': return a / b;
-        }
-        return 0;
+            void nextChar() {
+                ch = (++pos < expr.length()) ? expr.charAt(pos) : -1;
+            }
+
+            boolean eat(int charToEat) {
+                while (ch == ' ') nextChar();
+                if (ch == charToEat) {
+                    nextChar();
+                    return true;
+                }
+                return false;
+            }
+
+            double parse() {
+                nextChar();
+                double x = parseExpression();
+                if (pos < expr.length()) throw new RuntimeException("Unexpected: " + (char)ch);
+                return x;
+            }
+
+            double parseExpression() {
+                double x = parseTerm();
+                for (;;) {
+                    if      (eat('+')) x += parseTerm();
+                    else if (eat('-')) x -= parseTerm();
+                    else return x;
+                }
+            }
+
+            double parseTerm() {
+                double x = parseFactor();
+                for (;;) {
+                    if      (eat('*')) x *= parseFactor();
+                    else if (eat('/')) x /= parseFactor();
+                    else return x;
+                }
+            }
+
+            double parseFactor() {
+                if      (eat('+')) return parseFactor();
+                if      (eat('-')) return parseFactor();
+
+                double x;
+                int startPos = this.pos;
+
+                if ((ch >= '0' && ch <= '9') || ch == '.') {
+                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+                    x = Double.parseDouble(expr.substring(startPos, this.pos));
+                } else {
+                    throw new RuntimeException("Unexcepted: " + (char)ch);
+                }
+                return x;
+            }
+        }.parse();
+
     }
 }
