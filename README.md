@@ -3,7 +3,7 @@ It demonstrates hands-on understanding of Java fundamentals, GUI development,
 and expression parsing logic without relying on external libraries.
 
 GUI Calculator (Java Swing)
-🚀 Project Overview
+ Project Overview
 
 This is a GUI-based calculator built using Java and Swing.
 
@@ -26,7 +26,8 @@ Learn layout positioning
 Implement a custom mathematical expression parser
 Avoid using deprecated ScriptEngine
 Improve logical thinking and recursion understanding
-🛠 Technologies Used
+
+Technologies Used
 Java
 Swing (GUI Framework)
 AWT Event Handling
