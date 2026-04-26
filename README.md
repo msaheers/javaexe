@@ -27,7 +27,7 @@ Implement a custom mathematical expression parser
 Avoid using deprecated ScriptEngine
 Improve logical thinking and recursion understanding
 
-Technologies Used
+Technologies Used:
 Java
 Swing (GUI Framework)
 AWT Event Handling
